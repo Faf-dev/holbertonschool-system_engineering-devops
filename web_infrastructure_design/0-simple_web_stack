@@ -1,0 +1,51 @@
+# URL for my whiteboard :
+https://urls.fr/Okagnp
+
+1. What is a server?
+A server is a physical or virtual machine that provides services or resources to other devices (clients) over a network. In this case, it hosts a website and handles HTTP requests from users.
+
+2. What is the role of the domain name?
+The domain name (foobar.com) is a human-readable address that maps to an IP address. Instead of typing an IP like 8.8.8.8, users can type www.foobar.com. It simplifies web access.
+
+3. What type of DNS record is www in www.foobar.com?
+The www subdomain is defined using a DNS A record.
+A Record maps the domain www.foobar.com to the IP address 8.8.8.8.
+
+4. What is the role of the web server (Nginx)?
+The web server (Nginx) handles incoming HTTP/HTTPS requests from users. Its responsibilities include:
+Serving static content (images, HTML, CSS, JS)
+Acting as a reverse proxy to pass dynamic requests to the application server
+
+5. What is the role of the application server?
+The application server executes the website’s logic. It:
+Processes dynamic requests (form submissions)
+Generates responses (HTML for example) based on the business logic
+Communicates with the database if needed
+
+6. What is the role of the database (MySQL)?
+The database stores structured data like:
+User accounts
+Posts or articles
+Comments, etc.
+It allows the application server to read (display data, ...) and write (store a new user, ...) information.
+
+7. What is the server using to communicate with the user’s computer?
+The server communicates with the user’s computer via the HTTP or HTTPS protocols over the TCP/IP stack.
+HTTP or HTTPS allows delivery of web content.
+Data travels back and forth via the Internet, using the server's public IP address.
+
+Issues With This Infrastructure
+1. SPOF (Single Point of Failure)
+If the single server fails, the entire website becomes unavailable. No backup or load distribution exists.
+
+2. Downtime During Maintenance
+Updating the application, restarting the web server, or modifying database configuration causes temporary downtime:
+Users can't access the site
+Deployments might cause brief outages
+
+3. No Scalability
+With increased traffic, the single server may:
+Run out of CPU or RAM
+Become slow or crash
+Be unable to serve all incoming requests
+This infrastructure cannot scale horizontally (no way to add more servers) and has limited vertical scalability (upgrading hardware).

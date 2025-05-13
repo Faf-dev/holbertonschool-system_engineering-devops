@@ -1,0 +1,82 @@
+URL for my whiteboard:
+https://urls.fr/mY35fX
+
+Specific Components and Why They Are Added
+1. DNS
+Why: Translates the domain name (www.foobar.com) to the public IP address of the Load Balancer.
+Benefit: Users access the site with a friendly URL instead of an IP.
+
+2. Load Balancer (HAProxy)
+Why: Distributes traffic between multiple servers.
+Benefit: Improves availability, load distribution, and response times.
+
+3. Two Web Servers
+Each server includes:
+Nginx (Web Server): Serves static files, terminates SSL, and proxies requests to the application.
+App Server: Runs dynamic application logic (e.g., PHP, Python, Node.js).
+App Files: Local copy of the codebase.
+Database (MySQL): Stores data locally or in a replicated architecture.
+
+Why two servers: Redundancy, load sharing, and high availability.
+
+Load Balancer Details
+What Distribution Algorithm?
+Round Robin (default in HAProxy)
+    It forwards each new request to the next server in line.
+    Simple and effective for evenly loaded servers.
+
+Example:
+    User 1 → Server 1  
+    User 2 → Server 2  
+    User 3 → Server 1 
+
+Active-Active vs. Active-Passive Setup
+Active-Active (What You’re Using):
+Both Server 1 and Server 2 are actively handling requests simultaneously.
+Pros:
+    Higher throughput
+    Better load distribution
+    Redundant failover
+
+Active-Passive (Not used here):
+Only one server handles traffic; the other stays idle unless the primary fails.
+Used in: Disaster recovery, not real-time balancing.
+
+Primary-Replica (Master-Slave) Database Cluster
+How it works:
+Primary (Master): Handles all writes (INSERT, UPDATE, DELETE).
+Replicas (Slaves): Handle read-only queries and stay synced via replication.
+
+Application Interaction:
+Application writes to Primary.
+Reads can be directed to Replicas to reduce load.
+
+Role           Used For               Writes Allowed?         Reads Allowed?
+Primary        Main DB, writes        ✅ Yes                 ✅ Yes
+Replica        Offload read ops       ❌ No                  ✅ Yes
+
+
+Issues in This Infrastructure
+1. Single Points of Failure (SPOFs)
+Load Balancer: If HAProxy fails and there is no backup, all access is blocked.
+DNS Provider: If DNS fails, no users can resolve the domain.
+Database: Without replication, DB crash = total data unavailability.
+
+2. Security Issues
+No firewall:
+    All ports are exposed (e.g., MySQL, SSH).
+    Risk of brute-force, SQL injection, port scanning.
+
+No HTTPS:
+    Traffic is sent in cleartext.
+    Man-in-the-middle attacks are possible.
+
+3. No Monitoring
+No system to monitor:
+    Uptime
+    Server load
+    Logs or failures
+
+Risks:
+    Failures go unnoticed
+    No alerting = delayed response

@@ -1,0 +1,66 @@
+URL for my whiteboard:
+https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=last.drawio&dark=auto#R%3Cmxfile%3E%3Cdiagram%20name%3D%22Page-1%22%20id%3D%22Gl0dehgh8N7vQ3ran1lM%22%3E7VjLjpswFP2aSO0iFdiBTJaTRzuLaVUp7TyWDr4FVwZTYwLM19cEE6BoIiq1hUpZ4Xuur%2FF9nCPEDG%2FC%2FIMkcfBRUOAzZNF8hrczhGxrgfSjRIoKcZZWBfiS0QpqAXv2AnWkQVNGITFYBSkhuGJxF%2FREFIGnOhiRUmTdbd8Epx0gJj70gL1HeB99ZFQFJgvLavA7YH6gfnGEpN5rgCQgVGQtCO9meCOFUNUqzDfAy9p1y%2FL%2BFe%2F5XhIiNSRg85KuHx4%2B8acv6MfW37tHRebzpbmbKup8ger0jSmkCoQvIsJ3DbqWIo0olKda2mr23AsRa9DW4HdQqjC9JKkSGgpUyI0XcqaeyvB3jrGeW55tbk4%2BGUVtREoWraDSfG77mrCTVcdV%2BZVJvVo2AyUilR5cqFU9fUT6oC7sQ%2BfmalKACEHfR8dJ4ESxY%2FcexEynf97XdFAvTBN%2Fo6Hm3CPhqXnT1wRkr8tND8uyZwFTsI%2FJKf1M87jbL3MkSAX55Sr2szYByDaTZlRghSszayh1Y4QiaLEJO3%2BpTDfXuR8892jg3Dtjzv3q2tA%2F3lB3zIainpDdC0LnB8JJ5JWK5nJ99zVlR730y%2BWbu9vPUuTF29qn39tyT04D7frTaCwRtNGVNINJgweSZjEmaXCPNLdxzJmnXy2iMkuQxwl%2BDaCVOy4TFr26bYkiB5LA5GqFHXtk1bB6NZm%2BaqCxZMMZKBt4TNlweuOfwWE6cmHXs1zLBRqbAnavJtOnwHIsCrj%2FAwXcaVMArVb%2FigLabH5KnXytP3t49xM%3D%3C%2Fdiagram%3E%3C%2Fmxfile%3E
+
+1. Additional Server
+Role: Host dedicated tier (App or DB, depending on previous setup)
+
+Why it's added:
+    To support component separation — web, app, and DB each run on separate hardware
+    Ensures resources are not shared, which improves performance and fault isolation
+
+2. HAProxy Load Balancer (Clustered)
+Why it's added:
+    To achieve High Availability (HA)
+    Prevent a single point of failure in traffic distribution
+    Ensures continued service even if one HAProxy node fails
+
+Cluster Configuration Options:
+    Active-Active (both LB nodes share load)
+    Active-Passive (failover only if primary fails)
+
+Extra Benefits:
+    SSL termination
+    Health checks for backend services
+    Load metrics and logging
+
+3. Split Roles by Server (Component Isolation)
+A. Web Server (Nginx or Apache)
+Function:
+    Serves static content (HTML, CSS, JS)
+    Forwards dynamic requests to the app server
+
+Why separate?
+    Reduces load on app server
+    Optimized for fast file delivery
+    Enables better caching and SSL management
+
+B. Application Server (e.g., Flask, Node.js, Django)
+Function:
+    Executes business logic
+    Handles API endpoints, session management, dynamic content
+
+Why separate?
+    Frees the app from competing for resources with static content
+    Easier to horizontally scale only the application tier
+    Isolates logic from presentation
+
+C. Database Server (MySQL/PostgreSQL)
+Function:
+    Stores all persistent application data
+
+Why separate?
+    Databases are resource-intensive (disk I/O, memory)
+    Enhanced security — the DB server doesn’t expose external HTTP interfaces
+    Facilitates backups, replication, and optimized DB tuning
+
+Benefit	Explanation
+High Availability (HA)	Clustered HAProxy ensures no single point of failure
+Scalability	Can scale web/app/database tiers independently
+Performance Optimization:
+    Each server can be tuned for its specific function
+Security:
+    Isolated DB server limits attack surface
+Fault Isolation:
+    A failure in one tier doesn't crash the entire system
+Maintainability:
+    Easier debugging and upgrades per tier

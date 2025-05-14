@@ -1,0 +1,62 @@
+URL for my whiteboard :
+https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=server-firewall.drawio#R%3Cmxfile%3E%3Cdiagram%20name%3D%22Page-1%22%20id%3D%229g1q92xJjXHk7j4jocVq%22%3E7Vrfb5swEP5rkJqHRPxO8thkXTetlSal09ZHBxxwCjYzTkn218%2FGpoGYZHRaRzblCfzZZ%2By7%2B%2Bw7G8OZp9tbCrL4noQwMWwz3BrOO8O2LdMz%2BUMgO4l4vieBiKJQQuYeWKAfsJJU6AaFMFeYhBghCUNZEwwIxjBgDQxQSopmsxVJwgaQgQhqwCIAiY5%2BRSGLJTqupiXwDxBFsfqyZ6qKFFRtFZDHICRFDXJuDGdOCWHyLd3OYSJ011TL%2ByO1L%2BOiELMuArfOp8dr%2Bim6Xa9n9%2Bv1xzxCZDhVY2O7ar4w5NNXRUJZTCKCQXKzR2eUbHAIRa8mL%2B3b3BGScdDi4BoytlO2BBtGOBSzNFG1cIvYNyE%2B8lTpsVbzbqt6Lgu7qoAZ3dWERPGxXrcXK0uVnJyfmNRRtSkoJxsawBO6qrwP0AiyE%2B38F%2BNyUkCSQj4eLkdhAhh6bo4DKO%2BMXtrtLchflBFfYVDV7zNINupLX3JINSvvbSjUXsSIwUUGyukXnMdNe6kuIWVwe1qL%2BqyVgOOOpYhaBdyJLBY1SqlO4xqbnDdTk6Wp5OL4x5Rld3R8r1fHt%2F8Vi%2FZgGbdPy9jakmTYfsKHOwvRM3%2BNWKkUH6Ri3cHLXDzuCAi50AwkAAdiATOvPjw8fF7wlwdIU4T5wAkeHIpVPfOBNjtv%2BV4J5RnADa%2Fxv2%2FEjjxbguApKv1jGJCEUMO5FpqmAOeVpWZl2PFSl4h1axgC%2BnRFo%2BUV3425vszqMZBPUWN7nizUXwYDOSr1%2BWqci8Udr5%2FztbcMXoQiiqIYrQhZAjoKSFqbsZxLc36Hiuh5H7DHgin1ncByp9pWwPcHfS9w3bdaOdx%2FZeU4g73A7bjijPtccVxtxXmPKCxAKen0TgLXdg5IYNt9x0O6Vi4cOBnndODApE8OeKc4oMdKf38j8M%2BMAaamkwsDjinL78gAu08G%2BKcYoOd%2FfafEU79nAlzOgroTYNyRAFavh0FjjQFf4ZIDC0ify5yqLRO7zjKZlITL0WhUNVjSM88sXEsLqir61Bg1bUssJm%2FFqMmFUZ0ZNenKqF5PmSa%2FYpT1%2FzDK9t1zY5Stb9tnyqg%2FyAyra75h9Zp0W3rGcU8wYoQiHJ2BM08OnNlpyTgmfkvA5byVM18yjleQoGvK0TMJ9KTjjEjgWs2ku3cKWHqEOhcuBIRkWlOcme9yBtMTB%2FkrgpnRdpAvKoZ5SQdxSm%2FZ2dZoO2m%2F%2Bs0rgeMn%2BsbhDYFo6lqygTOVT9dU7cpxrkCKkp1sDZ64vw75BxnMn2TjHOB8mEOKVlKGuwIbggRFWF1BwBVrndyJe5K2W4P%2FUQWLTcqHEaGANyrvUQiLy5Ct6Wc8kEMBzAe%2FvleRHnfWIZxTJfXVtbupB3CWPdUZ7%2FuvZjwv7n9mKetqfwQ5Nz8B%3C%2Fdiagram%3E%3C%2Fmxfile%3E
+
+Components and Justification
+1. Firewalls (3 Total)
+    Firewall 1: Controls traffic from the internet, allowing only HTTPS.
+    Firewall 2–3: Protect each internal server, allowing only specific communication (e.g., MySQL, monitoring port).
+
+Why firewalls?
+    Prevent unauthorized access.
+    Limit attack surface.
+    Enforce least-privilege network access.
+
+2. HTTPS with SSL Certificate
+A valid SSL certificate is installed at the Load Balancer to serve www.foobar.com over HTTPS.
+
+Why HTTPS?
+    Encrypts traffic end-to-end to protect user data.
+    Validates server identity.
+    Prevents MITM (Man-in-the-Middle) attacks.
+    Mandatory for modern SEO and compliance (e.g., GDPR).
+
+3. Monitoring Clients (3 Total)
+Each server runs a monitoring agent (e.g., Sumologic Collector, Prometheus Node Exporter, Datadog Agent).
+Sends logs, metrics (CPU, memory, disk), and custom application data to the Central Monitoring System.
+
+Why Monitoring?
+    Enables alerting on downtime or performance issues.
+    Facilitates root cause analysis.
+    Tracks usage metrics and business KPIs.
+
+How Monitoring Works
+Data Collection: Agents on each server collect:
+    System metrics (CPU, RAM, Disk)
+    Application logs (e.g., Nginx access logs)
+    Web traffic metrics (requests, errors, latency)
+    Sending Data: Forwarded to central monitoring platform using secure protocols (e.g., HTTPS, TLS).
+    Visualization and Alerts: Dashboards, alerts, historical analysis.
+    Monitoring QPS (Queries Per Second)
+
+To monitor QPS (web server):    
+    Use Nginx/Apache logs + a log forwarder (e.g., Sumologic agent).
+    Use custom metrics (e.g., nginx_http_requests_total).
+
+Set up:
+    A dashboard for QPS over time.
+    An alert if QPS exceeds a threshold.
+
+
+Infrastructure Issues and Caveats
+1. SSL Termination at Load Balancer
+Issue: Traffic between LB and backend servers may be unencrypted, exposing sensitive data in internal network.
+
+2. Single MySQL Server (Write Master)
+Issue: Creates a single point of failure.
+If it crashes: no writes possible, potential data loss.
+
+3. Monolithic Servers (App + DB + Web on One Host)
+Issue:
+Hard to scale independently (e.g., cannot add more DB capacity without adding full stack).
+Fault isolation is weak – one failing component (e.g., DB crash) affects all layers.
+Security risk: Attack surface is larger on each host.
